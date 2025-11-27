@@ -2,17 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'Scrims/beranda.dart';
 import 'Scrims/ke5.dart';
 import 'Scrims/ke6.dart';
 import 'Scrims/ke6_2.dart';
 import 'Scrims/ke9.dart';
+import 'Scrims/ke9_2.dart';
 
-void main() async {
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   Intl.defaultLocale = 'id_ID';
   await initializeDateFormatting('id_ID', null);
+
+  await GetStorage.init();
+
+  Get.put(StorageController(), permanent: true);
+
   runApp(const MyApp());
 }
 
@@ -21,10 +30,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Navbar Demo',
-      home: MainNavbar(),
+
+      home: const MainNavbar(),
+
+      getPages: [
+        GetPage(
+          name: '/named-second',
+          page: () => const NamedSecondPage(),
+        ),
+      ],
     );
   }
 }
@@ -49,6 +66,7 @@ class _MainNavbarState extends State<MainNavbar> {
       GetRequestPage(onGoTab: _onItemTapped),
       const Ke6_2Page(),
       const Ke9Page(),
+      const Ke9_2Page(),
     ];
 
     return Scaffold(
@@ -66,6 +84,7 @@ class _MainNavbarState extends State<MainNavbar> {
           BottomNavigationBarItem(icon: Icon(Icons.cloud_download), label: 'GET'),
           BottomNavigationBarItem(icon: Icon(Icons.widgets), label: 'Modul 6'),
           BottomNavigationBarItem(icon: Icon(Icons.auto_awesome), label: 'Modul 9'),
+          BottomNavigationBarItem(icon: Icon(Icons.auto_awesome), label: 'Modul 9_2'),
         ],
       ),
     );
